@@ -119,110 +119,152 @@ $('#payment').on("change", function () {
   }
 });
 
-$('form').submit(function () {
-  console.log('hi');
+const activityLegend = document.querySelector('form .actitity-legend')
+const paymentLegend = document.querySelector('form .payment-legend')
+
+
+
+// /Variables needed in sections
+const paymentDiv = document.querySelector("#payment");
+const creditCard = document.querySelector("#credit-card");
+const payPal = document.querySelectorAll("fieldset div p")[0];
+const bitcoin = document.querySelectorAll("fieldset div p")[1];
+const ccNumber = document.getElementById("cc-num");
+const zip = document.getElementById("zip");
+const cvv = document.getElementById("cvv");
+const exDate = document.getElementById("exp-month");
+const exYear = document.getElementById("exp-year");
+
+//Hide all options until selection is made
+// $(creditCard).hide();
+$(bitcoin).hide();
+$(payPal).hide();
+
+//Display payment sections based on payment option selectedValue
+paymentDiv.addEventListener('change', (e) => {
+  if (e.target.value === 'credit card') {
+    payPal.style.display = 'none';
+    creditCard.style.display = 'block';
+    bitcoin.style.display = 'none';
+    console.log("cc selected");
+  ;
+  }
+
+  if (e.target.value === 'paypal') {
+    payPal.style.display = 'block';
+    creditCard.style.display = 'none';
+    bitcoin.style.display = 'none';
+    console.log("pp selected");
+    paymentLegend.innerText = "Payment Info";
+    paymentLegend.classList.remove('errorText');
+  }
+
+  if (e.target.value === 'bitcoin') {
+    payPal.style.display = 'none';
+    creditCard.style.display = 'none';
+    bitcoin.style.display = 'block';
+    console.log("bc selected");
+    paymentLegend.innerText = "Payment Info";
+    paymentLegend.classList.remove('errorText');
+  }
 });
 
-
-$paymentOptions = $("#payment option");
-let checked = $("input:checked");
-checked.length = 0;
-const email = $("#mail");
-const emailRegex = /^[A-Za-z0-9]*?_?[A-Za-z0-9]+@[A-Za-z0-9]*.[c][o][m]$/;
-
-function Validation() {
-  if (emailRegex.test(email.val())) {
+//validation function for Credit Card info.
+function creditCardValidation() {
+  const cardRegex = /^\d{13,16}$/;
+  if  (cardRegex.test($('#cc-num').val()))   {
+    ccNumber.previousElementSibling.textContent = "Card Number:";
+    ccNumber.previousElementSibling.classList.remove('errorText');
+    ccNumber.classList.remove('errorBox');
     return true;
+  }else {
+    ccNumber.previousElementSibling.classList.add('errorText');
+    ccNumber.previousElementSibling.textContent = "Please enter a number that is between 13 and 16 digits long.";
+    ccNumber.classList.add('errorBox');
+  }
+}
+//Live cc validation (calls the above function)
+function paymentVal() {
+  ccNumber.addEventListener('focusout', (e) => {
+    //if credit card # is of appropriate length..
+    creditCardValidation();
+  })
+};
+
+//validation function for Zip Code Value
+function finalZipVal() {
+  //if credit card 5 digits long..
+  if (zip.value.length === 5) {
+    zip.previousElementSibling.textContent = "Zip Code:";
+    zip.previousElementSibling.classList.remove('errorText');
+    zip.classList.remove('errorBox');
+    return true;
+  }
+  //if zip is of incorrect length
+  else {
+    zip.previousElementSibling.classList.add('errorText');
+    zip.previousElementSibling.innerText = "Please enter a valid zip code.";
+    zip.classList.add('errorBox');
+  }
+}
+
+//Live zip code validation (calls on the function above)
+zip.addEventListener('focusout', (e) => {
+  finalZipVal();
+});
+
+//Validation Function for CVV #
+function finalCVVVal() {
+  //if credit card 5 digits long..
+  if (cvv.value.length === 3) {
+    cvv.previousElementSibling.textContent = "CCV:";
+    cvv.previousElementSibling.classList.remove('errorText');
+    cvv.classList.remove('errorBox');
+    return true;
+  }
+  //if zip is of incorrect length
+  else {
+    cvv.previousElementSibling.classList.add('errorText');
+    cvv.previousElementSibling.innerText = "Please enter the 3-digit CVV found on the back of the card.";
+    cvv.classList.add('errorBox');
+  }
+};
+
+//Live ccv validation
+cvv.addEventListener('focusout', (e) => {
+  finalCVVVal();
+})
+
+
+paymentVal();
+
+
+
+
+const emailVal = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+//Email field
+function errorEmail() {
+  console.log(name);
+  const emailVal = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  //If email doesn't have any text...
+  if (email.value === "") {
+    email.previousElementSibling.classList.add('errorText');
+    email.previousElementSibling.innerText = "Oops! You forgot to enter your email.";
+    email.classList.add('errorBox');
+    //If email is correctly formatted...
+  } else if (email.value.match(emailVal)) {
+    email.previousElementSibling.textContent = "Email:";
+    email.previousElementSibling.classList.remove('errorText');
+    email.classList.remove('errorBox');
+    return true;
+    //If email is incorrectly formatted...
   } else {
+    email.previousElementSibling.classList.add('errorText');
+    email.previousElementSibling.innerText = "Please enter a valid email address.";
+    email.classList.add('errorBox');
     return false;
   }
 }
-//   function selectSomething() {
-// if (checked.length === 0) {
-//     alert("select at least 1 event before submitting");
-//    }
-//   }
-// $paymentOptions = $("#payment option");
-// let checked = $("input:checked");
-// checked.length = 0;
-// // const name = $("#name");
-// const email = $("#mail");
-// // const card = $("#cc-num");
-// // const zip = $("#zip");
-// // const cvv = $("#cvv");
 
-// // const nameRegex = /^[A-Za-z]+ ?[A-Za-z]* ?[A-Za-z]* ?$/;
-// const emailRegex = /^[A-Za-z0-9]*?_?[A-Za-z0-9]+@[A-Za-z0-9]*.[c][o][m]$/;
-// const cardRegex = /^\d{13,16}$/;
-// const zipRegex = /^\d{5}$/;
-// const cvvRegex = /^\d{3}$/;
-// $("button").on("click", (e) => {
-// alert('fill out all fields');
-//   e.preventDefault();
-// });
-//validation for Name input
-// function nameValidation() {
-//   if (nameRegex.test(name.val())) {
-//     return true;
-//   } else {
-//     return false;
-//   }
-// }
-//email
-
-// //card
-// function cardValidation() {
-//   if (cardRegex.test(card.val())) {
-//     return true;
-//   } else {
-//     return false;
-//   }
-// }
-// //zip
-// function zipValidation() {
-//   if (zipRegex.test(zip.val())) {
-//     return true;
-//   } else {
-//     return false;
-//   }
-// }
-// //cvv
-// function cvvValidation() {
-//   if (cvvRegex.test(cvv.val())) {
-//     return true;
-//   } else {
-//     return false;
-//   }
-// }
-
-
-
-// $("form").on("submit", e => {
-//   if ($paymentOptions[2].selected || $paymentOptions[3].selected) {
-//     if (
-//       // !nameValidation() ||
-//       // !emailValidation() ||
-//       // checked.length === 0 ||
-//       // name.val() === "" ||
-//       email.val() === ""
-//   //   ) {
-//   //     // alert("not all forms are filled correctly");
-//   //     // e.preventDefault();
-//   //   }
-//   // } else if ($paymentOptions[1].selected) {
-//   //   if (!cardValidation() || !zipValidation() || !cvvValidation() || card.val() === "" || zip.val() === "" || cvv.val() === "") {
-//   //     e.preventDefault();
-//   //   }
-//     // if (
-//       // !nameValidation() ||
-//       // !emailValidation() ||
-//       // checked.length === 0 ||
-//       // name.val() === "" ||
-//       email.val() === ""
-//     ) {
-//       alert("not all forms are filled correctly");
-//       e.preventDefault();
-//     }
-//   }
-//   
 

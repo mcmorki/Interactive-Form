@@ -155,13 +155,7 @@ option {
 /* ================================= 
   Helper Classes
 ==================================== */
-.total-display {
-	padding: .5em;
-	font-weight: 700;
-	display: inline-block;
-	font-size: 1em;
-  color: inherit;
-}
+
 .is-hidden {
 	display: none;
 }
@@ -171,6 +165,20 @@ option {
   display: table;
   clear: both;
 }
+
+.total-display {
+	display: block;
+	color: black 
+}
+.errorText {
+  color: red;
+  font-weight: bold;
+}
+
+.errorBox {
+  border: 2px solid red;  
+}
+
 
 /* ================================= 
   Media Queries
