@@ -119,80 +119,110 @@ $('#payment').on("change", function () {
   }
 });
 
-const regex = /^\d{3}$/;
-const regex1 = /^\d{5}$/;
-const regex2 = /^\d{13,16}$/;
+$('form').submit(function () {
+  console.log('hi');
+});
 
-const regexValidation = (regex, errorMessage) => {
-  return $input => {
-    const validInput = regex.test($input.val());
-    if (!validInput) {
-      throw new error(errorMessage);
-    }
+
+$paymentOptions = $("#payment option");
+let checked = $("input:checked");
+checked.length = 0;
+const email = $("#mail");
+const emailRegex = /^[A-Za-z0-9]*?_?[A-Za-z0-9]+@[A-Za-z0-9]*.[c][o][m]$/;
+
+function Validation() {
+  if (emailRegex.test(email.val())) {
+    return true;
+  } else {
+    return false;
   }
 }
+//   function selectSomething() {
+// if (checked.length === 0) {
+//     alert("select at least 1 event before submitting");
+//    }
+//   }
+// $paymentOptions = $("#payment option");
+// let checked = $("input:checked");
+// checked.length = 0;
+// // const name = $("#name");
+// const email = $("#mail");
+// // const card = $("#cc-num");
+// // const zip = $("#zip");
+// // const cvv = $("#cvv");
 
-
-const vaildFunction = () => [
-  {
-    input: '#cc-num',
-    validation: [
-      regexValidation(/^\d{13,16}/, "error")
-    ],
-    runif: $('#payment').val() === 'credit card'
-  },
-  {
-    input: '#zip',
-    validation: [
-      regexValidation(/^\d{5}$/, "error")
-    ],
-    runif: $('#payment').val() === 'credit card'
-  },
-  {
-    input: '#cvv',
-    validation: [
-      regexValidation(/^\d{3}$/, "error")
-    ],
-    runif: $('#payment').val() === 'credit card'
-  }]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// function showOrHideTip(show, element) {
-//   // show element when show is true, hide when false
-//   if (show) {
-//     element.style.display = "inherit";
+// // const nameRegex = /^[A-Za-z]+ ?[A-Za-z]* ?[A-Za-z]* ?$/;
+// const emailRegex = /^[A-Za-z0-9]*?_?[A-Za-z0-9]+@[A-Za-z0-9]*.[c][o][m]$/;
+// const cardRegex = /^\d{13,16}$/;
+// const zipRegex = /^\d{5}$/;
+// const cvvRegex = /^\d{3}$/;
+// $("button").on("click", (e) => {
+// alert('fill out all fields');
+//   e.preventDefault();
+// });
+//validation for Name input
+// function nameValidation() {
+//   if (nameRegex.test(name.val())) {
+//     return true;
 //   } else {
-//     element.style.display = "none";
+//     return false;
 //   }
-//   // ]
-//   // vaildFunction();
-//   const usernameInput = document.getElementByName("user_name");
-//   // const vaildFunction = () => [
+// }
+//email
 
-//   function isValidUsername(username) {
-//     return /[^a-z$]+/.test(username);
+// //card
+// function cardValidation() {
+//   if (cardRegex.test(card.val())) {
+//     return true;
+//   } else {
+//     return false;
 //   }
-//   usernameInput.addEventListener("input", e => {
-//     const text = e.target.value;
-//     const valid = isValidUsername(text);
-//     const showTip = text !== "" && !valid;
-//     const tooltip = e.target.nextElementSibling;
-//     showOrHideTip(showTip, tooltip);
-//   });
-//   usernameInput.addEventListener("input", createListener(isValidUsername));
-// } 
-// showOrHideTip(usernameInput, valid)
+// }
+// //zip
+// function zipValidation() {
+//   if (zipRegex.test(zip.val())) {
+//     return true;
+//   } else {
+//     return false;
+//   }
+// }
+// //cvv
+// function cvvValidation() {
+//   if (cvvRegex.test(cvv.val())) {
+//     return true;
+//   } else {
+//     return false;
+//   }
+// }
+
+
+
+// $("form").on("submit", e => {
+//   if ($paymentOptions[2].selected || $paymentOptions[3].selected) {
+//     if (
+//       // !nameValidation() ||
+//       // !emailValidation() ||
+//       // checked.length === 0 ||
+//       // name.val() === "" ||
+//       email.val() === ""
+//   //   ) {
+//   //     // alert("not all forms are filled correctly");
+//   //     // e.preventDefault();
+//   //   }
+//   // } else if ($paymentOptions[1].selected) {
+//   //   if (!cardValidation() || !zipValidation() || !cvvValidation() || card.val() === "" || zip.val() === "" || cvv.val() === "") {
+//   //     e.preventDefault();
+//   //   }
+//     // if (
+//       // !nameValidation() ||
+//       // !emailValidation() ||
+//       // checked.length === 0 ||
+//       // name.val() === "" ||
+//       email.val() === ""
+//     ) {
+//       alert("not all forms are filled correctly");
+//       e.preventDefault();
+//     }
+//   }
+//   
+
