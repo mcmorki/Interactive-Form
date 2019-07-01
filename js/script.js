@@ -1,3 +1,5 @@
+
+
 $('#name').focus(); // on page load focus on the name input 
 
 
@@ -28,19 +30,6 @@ $('#design').change(function () {
 
   };
 })
-
-// when
-//     //  fieldset 2 - Activities
-//     //  Check Activities
-//     //      Main Conference                         $200
-//     //      Workshops Optional
-//     //          JS Frameworks WS - Tue 9am-12pm     $100    (Conflicts w/Express)
-//     //          JS Libraries WS  - Tue 1pm-4pm      $100    (Conflicts w/Node.js)
-//     //          Express WS       - Tue 9am-12pm     $100    (Conflicts w/JS Frameworks)
-//     //          Node.js WS       - Tue 1pm-4pm      $100    (Conflicts w/JS Libraries)
-//     //          Build Tools WS   - Wed 9am-12pm     $100
-//     //          npm WS           - Wed 1pm-4pm      $100
-
 // sets all classes with the same time in a variable for easy access 
 var check1 = $("input[name='js-frameworks']")
 var check2 = $("input[name='express']")
@@ -110,161 +99,238 @@ $('.activities').append('<div class="totalDiv"><label name="total-amount" class=
 $('.totalDiv').addClass('is-hidden');
 
 $(".credit-card").hide();
-
-$('#payment').on("change", function () {
-  if ($(this).val() == 'credit card') {
-    $(".credit-card").show();
-  } else {
-    $(".credit-card").hide();
-  }
-});
-
-const activityLegend = document.querySelector('form .actitity-legend')
-const paymentLegend = document.querySelector('form .payment-legend')
-
+$("p:first").hide();
+$("p:last").hide()
 
 
 // /Variables needed in sections
-const paymentDiv = document.querySelector("#payment");
-const creditCard = document.querySelector("#credit-card");
-const payPal = document.querySelectorAll("fieldset div p")[0];
-const bitcoin = document.querySelectorAll("fieldset div p")[1];
+
 const ccNumber = document.getElementById("cc-num");
 const zip = document.getElementById("zip");
 const cvv = document.getElementById("cvv");
 const exDate = document.getElementById("exp-month");
 const exYear = document.getElementById("exp-year");
-
-//Hide all options until selection is made
-// $(creditCard).hide();
-$(bitcoin).hide();
-$(payPal).hide();
+const username = document.getElementById("name");
 
 //Display payment sections based on payment option selectedValue
-paymentDiv.addEventListener('change', (e) => {
-  if (e.target.value === 'credit card') {
-    payPal.style.display = 'none';
-    creditCard.style.display = 'block';
-    bitcoin.style.display = 'none';
-    console.log("cc selected");
-  ;
-  }
 
-  if (e.target.value === 'paypal') {
-    payPal.style.display = 'block';
-    creditCard.style.display = 'none';
-    bitcoin.style.display = 'none';
-    console.log("pp selected");
-    paymentLegend.innerText = "Payment Info";
-    paymentLegend.classList.remove('errorText');
-  }
+$("select#payment option[value='credit card']").attr("selected", "selected"); // defaults on the credit card option 
+$(".credit-card").show() // shows the credit field due to it being defaulted
 
-  if (e.target.value === 'bitcoin') {
-    payPal.style.display = 'none';
-    creditCard.style.display = 'none';
-    bitcoin.style.display = 'block';
-    console.log("bc selected");
-    paymentLegend.innerText = "Payment Info";
-    paymentLegend.classList.remove('errorText');
+$('#payment').on("change", function () {
+   if ($(this).val() == 'credit card') {                   // if the selected value is credit card show the credit card information
+    $(".credit-card").show();
+  } else {
+    $(".credit-card").hide();                             // if it was not selected hide it
   }
-});
+  if ($(this).val() == 'paypal') {                        // if the selected value is paypal show the first paragrapgh tag on the page
+    $("p:first").show()
+  } else {
+    $("p:first").hide()                                   // if it was not selected hide it
+  }
+  if ($(this).val() == 'bitcoin') {                       // if the selected value is paypal show the last paragrapgh tag on the page
+    $("p:last").show()
+  } else {
+    $("p:last").hide()                                     // if it was not selected hide it
+  }
+})
 
 //validation function for Credit Card info.
 function creditCardValidation() {
-  const cardRegex = /^\d{13,16}$/;
-  if  (cardRegex.test($('#cc-num').val()))   {
-    ccNumber.previousElementSibling.textContent = "Card Number:";
-    ccNumber.previousElementSibling.classList.remove('errorText');
-    ccNumber.classList.remove('errorBox');
+  const cardRegex = /^\d{13,16}$/;          // only accepts a number 13 - 16 digits long 
+  if (cardRegex.test($('#cc-num').val())) {
+    $('#cc-num').prev().text("Card Number:"); // adds the text ( Card Number: ) back when the condition is met
+    $('#cc-num').prev().removeClass('errorText'); // if the condition is met removes red highlighted validation 
+    $('#cc-num').removeClass('errorBox');
     return true;
-  }else {
-    ccNumber.previousElementSibling.classList.add('errorText');
-    ccNumber.previousElementSibling.textContent = "Please enter a number that is between 13 and 16 digits long.";
-    ccNumber.classList.add('errorBox');
+  } else {
+    $('#cc-num').prev().addClass('errorText');
+    $('#cc-num').prev().text("Please enter a number that is between 13 and 16 digits long."); // warns the user what should be inputted 
+    $('#cc-num').addClass('errorBox');
   }
 }
-//Live cc validation (calls the above function)
-function paymentVal() {
-  ccNumber.addEventListener('focusout', (e) => {
-    //if credit card # is of appropriate length..
-    creditCardValidation();
-  })
-};
 
-//validation function for Zip Code Value
-function finalZipVal() {
-  //if credit card 5 digits long..
-  if (zip.value.length === 5) {
-    zip.previousElementSibling.textContent = "Zip Code:";
-    zip.previousElementSibling.classList.remove('errorText');
-    zip.classList.remove('errorBox');
+$('#cc-num').on('focusout', (e) => { // changes due to switiching between text input fields
+  creditCardValidation();
+})
+
+
+function zipCodeValidation() {
+
+  const cardRegex1 = /^\d{5}$/;     // only accepts a number 5 digits long 
+  if (cardRegex1.test($('#zip').val())) {
+    $('#zip').prev().text("Zip Code:");
+    $('#zip').prev().removeClass('errorText');
+    $('#zip').removeClass('errorBox');
     return true;
-  }
-  //if zip is of incorrect length
-  else {
-    zip.previousElementSibling.classList.add('errorText');
-    zip.previousElementSibling.innerText = "Please enter a valid zip code.";
-    zip.classList.add('errorBox');
+  } else {
+    $('#zip').prev().text("Please enter a valid zip code.")
+    $('#zip').prev().addClass('errorText');
+    $('#zip').addClass('errorBox');
   }
 }
+
 
 //Live zip code validation (calls on the function above)
-zip.addEventListener('focusout', (e) => {
-  finalZipVal();
+$('#zip').on('focusout', (e) => {
+  zipCodeValidation();
 });
 
 //Validation Function for CVV #
 function finalCVVVal() {
   //if credit card 5 digits long..
-  if (cvv.value.length === 3) {
-    cvv.previousElementSibling.textContent = "CCV:";
-    cvv.previousElementSibling.classList.remove('errorText');
-    cvv.classList.remove('errorBox');
+  const cardRegex2 = /^\d{3}$/;
+  if (cardRegex2.test($('#cvv').val())) {
+    $('#cvv').prev().text("CCV:");
+    $('#cvv').prev().removeClass('errorText');
+    $('#cvv').removeClass('errorBox');
     return true;
-  }
-  //if zip is of incorrect length
-  else {
-    cvv.previousElementSibling.classList.add('errorText');
-    cvv.previousElementSibling.innerText = "Please enter the 3-digit CVV found on the back of the card.";
-    cvv.classList.add('errorBox');
+  } else {
+    $('#cvv').prev().text("Please enter the 3-digit CVV found on the back of the card.")
+    $('#cvv').prev().addClass('errorText');
+    $('#cvv').addClass('errorBox');
   }
 };
 
 //Live ccv validation
-cvv.addEventListener('focusout', (e) => {
+$('#cvv').on('focusout', (e) => {
   finalCVVVal();
 })
-
-
-paymentVal();
-
-
-
-
-const emailVal = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-//Email field
-function errorEmail() {
-  console.log(name);
-  const emailVal = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  //If email doesn't have any text...
-  if (email.value === "") {
-    email.previousElementSibling.classList.add('errorText');
-    email.previousElementSibling.innerText = "Oops! You forgot to enter your email.";
-    email.classList.add('errorBox');
-    //If email is correctly formatted...
-  } else if (email.value.match(emailVal)) {
-    email.previousElementSibling.textContent = "Email:";
-    email.previousElementSibling.classList.remove('errorText');
-    email.classList.remove('errorBox');
+function finalCVVVal2() {
+  //if credit card 5 digits long..
+  const cardRegex3 = /[A-Za-z]/
+  if (cardRegex3.test($('#name').val())) {
+    $('#name').prev().text("Name:");
+    $('#name').prev().removeClass('errorText');
+    $('#name').removeClass('errorBox');
     return true;
-    //If email is incorrectly formatted...
   } else {
-    email.previousElementSibling.classList.add('errorText');
-    email.previousElementSibling.innerText = "Please enter a valid email address.";
-    email.classList.add('errorBox');
-    return false;
+    $('#name').prev().text("Please enter a name")
+    $('#name').prev().addClass('errorText');
+    $('#name').addClass('errorBox');
   }
-}
+};
 
+
+$('#name').on('focusout', (e) => {
+  finalCVVVal2();
+})
+function finalCVVVal3() {
+  //if credit card 5 digits long..
+  const cardRegex4 = /[A-Za-z]+@[a-zA-Z]+.[a-zA-z]+/
+  if (cardRegex4.test($('#mail').val())) {
+    $('#mail').prev().text("Email:");
+    $('#mail').prev().removeClass('errorText');
+    $('#mail').removeClass('errorBox');
+    return true;
+  } else {
+    $('#mail').prev().text("Please enter a valid email")
+    $('#mail').prev().addClass('errorText');
+    $('#mail').addClass('errorBox');
+  }
+};
+
+
+mail.addEventListener('focusout', (e) => {
+  finalCVVVal3();
+})
+
+// $('form').submit(function () {
+//   // $("").keyup(function() {
+//     if ( $('input').val() == "") {
+//         alert('Text-field is empty.');
+           
+//   }  
+// })
+
+// $('input[type="checkbox"]').submit(function(){
+//   if($(this). prop("checked") == true){
+//   alert("Checkbox is checked." );
+//   }else if($(this). prop("checked") == false){
+//     alert("Checkbox is unchecked." );
+//   }})
+
+
+  
+
+// $('form').submit(function () {
+
+//     // Get the Login Name value and trim it
+//     const nameField = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/
+//     const nameField1 = /[a-zA-Z]/
+
+//     // Check if empty of not
+//     if (nameField.test($('#mail').val()) == "") {
+//         alert('Text-field is empty.');;
+//     } else {
+      
+//     }
+//     if (nameField1.test($('#name').val())== "") {
+//       alert('Text-field is empty.');
+//       return false;
+// }});
+
+
+
+
+// $("#name").submit(function (e) {
+//   finalCVVVal2()
+//   return true;
+// });
+
+
+// //Email field
+// function errorEmail() {
+//   console.log(name);
+//   const emailVal = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+//   //If email doesn't have any text...
+//   if (email.value === "") {
+//     email.previousElementSibling.classList.add('errorText');
+//     email.previousElementSibling.innerText = "Oops! You forgot to enter your email.";
+//     email.classList.add('errorBox');
+//     //If email is correctly formatted...
+//   } else if (email.value.match(emailVal)) {
+//     email.previousElementSibling.textContent = "Email:";
+//     email.previousElementSibling.classList.remove('errorText');
+//     email.classList.remove('errorBox');
+//     return true;
+//     //If email is incorrectly formatted...
+//   } else {
+//     email.previousElementSibling.classList.add('errorText');
+//     email.previousElementSibling.innerText = "Please enter a valid email address.";
+//     email.classList.add('errorBox');
+//     return false;
+//   }
+// }
+
+
+$('form').on("submit", function (evt) {
+
+  if ($("input[type='checkbox']:checked").length == 0 ) {
+  
+     evt.preventDefault();
+     $("form submit").attr("disabled", true);
+
+     //disable a normal button
+     $("form submit").attr("disabled", true);
+
+     
+     $('checkbox').prev().text("Email:");
+     $('checkbox').prev().removeClass('errorText');
+     $('checkbox').removeClass('errorBox');
+     
+   } else {
+     $('checkbox').prev().text("Please enter a valid email")
+     $('checkbox').prev().addClass('errorText');
+     $('checkbox').addClass('errorBox');
+    //  $('#mail').prev().text("Please enter a valid email")
+    //  error.style.color = "crimson"
+    //  var errorContainer = document.getElementById("error-container"); // looks maybe something like this in your HTML: <div id="activities"><div id="error-container"></div></div>
+    //  errorContainer.innerHTML = "<h3>Choose at least one activity.</h3>"
+  return true 
+  }
+  })
+  
+    // $('#mail').prev().addClass('errorText');
+    // $('#mail').addClass('errorBox');
 
