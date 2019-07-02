@@ -1,5 +1,3 @@
-
-
 $('#name').focus(); // on page load focus on the name input 
 
 
@@ -214,41 +212,33 @@ function emailValidation() {
 $('#mail').on('focusout', (e) => {    // active when swtiching between text input fields
   emailValidation();
 })
+function checkBoxValidation() {
+  //if credit card 5 digits long..
+  if ($("input[type='checkbox']").is(':checked')) {
+    $('.activities legend').removeClass('errorText')   // if the condition is met removes red highlighted validation 
+    $('.activities legend').removeClass('errorBox')
+    return true
+  }
+  if ($("input[type='checkbox']").is(':not(:checked)')) {
+    $('.activities legend').text("Choose at least one activity") //warns the user to choose a least one activity 
+    $('.activities legend').addClass('errorText');   // if the condition is not met removes red highlighted validation 
+    $('.activities legend').addClass('errorBox');
+  }
+}
+
+$("input[type='checkbox']:checked").on('change', (e) => {    // active when swtiching between text input fields
+  checkBoxValidation();
+})
 
 
 
-$('form').on("submit", function (evt) {   // will not submit unless one activity is selected
+$('form').on("submit", function (evt) {   // will not submit unless all fields are completed
 
-  if (!!(emailValidation() & cvvValidation() & zipCodeValidation() & creditCardValidation() & nameValidation())) {
-    // evt.preventDefault(); 
-    $('.activites legend').text('errorText')
+  if (!!(emailValidation() & cvvValidation() & zipCodeValidation() & creditCardValidation() & nameValidation() & checkBoxValidation())) {
+
     return true;
   }
-
-  // emailValidation() & cvvValidation() & zipCodeValidation() & creditCardValidation() 
-
   evt.preventDefault();
-  // $("form submit").attr("disabled", true);
-
-
-  // $("form submit").attr("disabled", true);
-
-  // // $('checkbox').prev().text("Email:");
-  // // $('checkbox').prev().removeClass('errorText');
-  // // $('checkbox').removeClass('errorBox');
-  // // $('checkbox').prev().text("Please enter a valid email")
-  // // $('checkbox').prev().addClass('errorText');
-  // // $('checkbox').addClass('errorBox');
-  // $('fieldset legend').addClass('errorText')
-  // $(".activites").replace().parent().text('Choose at least one activity').addClass('errorText')
-
-
-  // $('.activities').addClass('errorBox', 'errorText')
-
-  //  error.style.color = "crimson"
-  //  var errorContainer = document.getElementById("error-container"); // looks maybe something like this in your HTML: <div id="activities"><div id="error-container"></div></div>
-  //  errorContainer.innerHTML = "<h3>Choose at least one activity.</h3>"
-  // return true
 
 }
 )
